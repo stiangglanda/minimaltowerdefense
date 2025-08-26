@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://1dha7kmbspe"]
 
-[ext_resource type="Script" uid="uid://bijpcmvynidgy" path="res://damage_number.gd" id="1_w08oa"]
+[ext_resource type="Script" uid="uid://bijpcmvynidgy" path="res://src/damage_number.gd" id="1_p3gxv"]
 
 [node name="Label" type="Label"]
 z_index = 1
@@ -8,4 +8,4 @@ offset_right = 40.0
 offset_bottom = 23.0
 horizontal_alignment = 1
 vertical_alignment = 1
-script = ExtResource("1_w08oa")
+script = ExtResource("1_p3gxv")

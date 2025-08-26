@@ -1,11 +1,11 @@
 [gd_scene load_steps=8 format=4 uid="uid://k43158rdap1d"]
 
-[ext_resource type="Script" uid="uid://6ehu7veprurm" path="res://game_root.gd" id="1_0o8ui"]
+[ext_resource type="Script" uid="uid://6ehu7veprurm" path="res://src/game_root.gd" id="1_0o8ui"]
 [ext_resource type="TileSet" uid="uid://b3ftoy3ur1gdj" path="res://assets/new_tile_set.tres" id="1_xj5yv"]
-[ext_resource type="PackedScene" uid="uid://bu11jjiig5jjl" path="res://tower.tscn" id="2_wd1uf"]
-[ext_resource type="PackedScene" uid="uid://cvota5ylgv847" path="res://Player.tscn" id="4_lkrbl"]
-[ext_resource type="PackedScene" uid="uid://2wfgur7nai5h" path="res://enemy.tscn" id="5_wd1uf"]
-[ext_resource type="PackedScene" uid="uid://ln6g1x5kag1k" path="res://castle.tscn" id="6_0o8ui"]
+[ext_resource type="PackedScene" uid="uid://bu11jjiig5jjl" path="res://scenes/tower.tscn" id="2_wd1uf"]
+[ext_resource type="PackedScene" uid="uid://cvota5ylgv847" path="res://scenes/Player.tscn" id="4_lkrbl"]
+[ext_resource type="PackedScene" uid="uid://2wfgur7nai5h" path="res://scenes/enemy.tscn" id="5_wd1uf"]
+[ext_resource type="PackedScene" uid="uid://ln6g1x5kag1k" path="res://scenes/castle.tscn" id="6_0o8ui"]
 
 [sub_resource type="NavigationPolygon" id="NavigationPolygon_0o8ui"]
 vertices = PackedVector2Array(1033, 139, 1033, 69.6797, 1078, 10, 1078, 394, 1161, 715, 1161, 645.68, 1270, 630, 1270, 950, 138, 10, 949, 72.3125, 649, 69.6797, 842, 950, 1077, 715, 842, 630, 1077, 648.312, 521, 389.68, 265, 331, 949, 139, 649, 139, 565, 139, 265, 261.68, 521, 459, 1398, 438, 1398, 522, 1514.46, -54, 1581.62, -54, 1581.05, 10, 1512.73, 6.53125, 1581.62, 10, 1581.05, 74, 1581.62, 74, 1581.05, 138, 1418, 310, 1581.62, 138, 1581.05, 202, 1581.62, 202, 1581.05, 266, 1581.62, 266, 1581.05, 330, 1418, 394, 1581.62, 330, 1581.05, 394, 1581.62, 394, 1581.23, 438, 1610, 522, 1610, 10, 1654, 10, 1654, 630, 138, 630, 437, 459, 565, 72.3125, 1107.42, 310, 1107.42, -54, 1225.4, 9, 1343.15, 9, 1343.04, -43.3203, 1391.93, -43.9766, 1393.84, 12.4375, 1222.85, -54, 437, 392.312, 181, 264.312, 181, 331)

@@ -13,7 +13,7 @@ extends CharacterBody2D
 var is_taking_damage = false
 var is_dying = false
 var original_modulate: Color
-var damage_numbers_scene = preload("res://DamageNumber.tscn")
+var damage_numbers_scene = preload("res://scenes/DamageNumber.tscn")
 
 func _ready():
 	max_health = health
