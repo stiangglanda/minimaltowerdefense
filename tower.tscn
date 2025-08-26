@@ -1,0 +1,46 @@
+[gd_scene load_steps=7 format=3 uid="uid://bu11jjiig5jjl"]
+
+[ext_resource type="Texture2D" uid="uid://7jgv6hkxvj05" path="res://assets/Buildings/Blue Buildings/Tower.png" id="1_k1sas"]
+[ext_resource type="Script" uid="uid://i7m168xteih0" path="res://tower.gd" id="1_vedim"]
+[ext_resource type="PackedScene" uid="uid://5q86frottauf" path="res://projectile.tscn" id="2_stebd"]
+[ext_resource type="Texture2D" uid="uid://bv352o623sx7o" path="res://assets/Units/Red Units/Archer/Archer_Shoot.png" id="4_jbe1c"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_k1sas"]
+size = Vector2(68.5, 53.5)
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_vedim"]
+radius = 42.0119
+
+[node name="Tower" type="Area2D"]
+y_sort_enabled = true
+script = ExtResource("1_vedim")
+projectile_scene = ExtResource("2_stebd")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+position = Vector2(-3, -55)
+texture = ExtResource("1_k1sas")
+
+[node name="Footprint" type="StaticBody2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Footprint"]
+position = Vector2(-1, 12)
+shape = SubResource("RectangleShape2D_k1sas")
+
+[node name="Range" type="CollisionShape2D" parent="."]
+scale = Vector2(6.49, 6.49)
+shape = SubResource("CircleShape2D_vedim")
+
+[node name="FireRate" type="Timer" parent="."]
+
+[node name="Muzzle" type="Marker2D" parent="."]
+position = Vector2(-1, -83)
+
+[node name="Bow" type="Sprite2D" parent="."]
+z_index = 1
+position = Vector2(-2, -110)
+texture = ExtResource("4_jbe1c")
+hframes = 8
+
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]
+[connection signal="body_exited" from="." to="." method="_on_body_exited"]
+[connection signal="timeout" from="FireRate" to="." method="_on_firerate_timeout"]

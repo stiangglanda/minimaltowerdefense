@@ -1,0 +1,17 @@
+[gd_scene load_steps=4 format=3 uid="uid://5q86frottauf"]
+
+[ext_resource type="Texture2D" uid="uid://bxjot5u4p4fqb" path="res://assets/Units/Red Units/Archer/Arrow.png" id="1_a85iw"]
+[ext_resource type="Script" uid="uid://clx0hwe7w7tpu" path="res://projectile.gd" id="1_qxf0c"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_qxf0c"]
+
+[node name="projectile" type="Area2D"]
+script = ExtResource("1_qxf0c")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("1_a85iw")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_qxf0c")
+
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]

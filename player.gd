@@ -1,0 +1,86 @@
+extends CharacterBody2D
+
+@onready var animation_tree = $AnimationTree
+@onready var state_machine = animation_tree.get("parameters/playback")
+@onready var attack_area = $AttackArea
+@onready var attack_collision = $AttackArea/AttackCollisionShape
+
+const SPEED = 300.0
+const ACCEL = 5.0
+const ATTACK_DAMAGE = 25
+
+var input: Vector2
+var attack_combo = 0
+var can_attack = true
+var enemies_in_range = []
+
+func _ready():
+	attack_area.body_entered.connect(_on_enemy_entered_range)
+	attack_area.body_exited.connect(_on_enemy_exited_range)
+	
+	animation_tree.animation_finished.connect(_on_animation_finished)
+
+func get_input():
+	input.x = Input.get_action_strength("right") - Input.get_action_strength("left")
+	input.y = Input.get_action_strength("down") - Input.get_action_strength("up")
+	return input.normalized()
+
+func _physics_process(delta):
+	var playerInput = get_input()
+	
+	if(playerInput.x <= -0.5):
+		$Sprite2D.flip_h = true
+	elif(playerInput.x >= 0.5):
+		$Sprite2D.flip_h = false
+	
+	if Input.is_action_just_pressed("attack") and can_attack:
+		handle_attack()
+	else:
+		pick_new_state(playerInput)
+		velocity = lerp(velocity, playerInput * SPEED, delta * ACCEL)
+	
+	move_and_slide()
+
+func handle_attack():
+	if not can_attack:
+		return
+		
+	velocity = Vector2.ZERO
+	can_attack = false
+	
+	if attack_combo == 0:
+		state_machine.travel("attack_1")
+		attack_combo = 1
+	else:
+		state_machine.travel("attack_2")
+		attack_combo = 0
+		
+	get_tree().create_timer(0.3).timeout.connect(deal_damage)
+
+func deal_damage():
+	for enemy in enemies_in_range:
+		if enemy and is_instance_valid(enemy):
+			if enemy.has_method("take_damage"):
+				enemy.take_damage(ATTACK_DAMAGE)
+				print("Player dealt ", ATTACK_DAMAGE, " damage to enemy!")
+
+func pick_new_state(playerInput):
+	var current_state = state_machine.get_current_node()
+	if current_state == "attack_1" or current_state == "attack_2":
+		return
+	if playerInput != Vector2.ZERO:
+		state_machine.travel("walk")
+	else:
+		state_machine.travel("idle")
+
+func _on_enemy_entered_range(body):
+	if body.has_method("take_damage"):
+		enemies_in_range.append(body)
+
+func _on_enemy_exited_range(body):
+	if body in enemies_in_range:
+		enemies_in_range.erase(body)
+
+func _on_animation_finished(anim_name):
+	if anim_name == "attack_1" or anim_name == "attack_2":
+		can_attack = true

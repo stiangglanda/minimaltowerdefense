@@ -1,0 +1,25 @@
+[gd_scene load_steps=3 format=3 uid="uid://ln6g1x5kag1k"]
+
+[ext_resource type="Texture2D" uid="uid://b01xsegrurcuw" path="res://assets/Buildings/Blue Buildings/Castle.png" id="1_xtwgx"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_xtwgx"]
+size = Vector2(263, 44.6695)
+
+[node name="Area2D" type="Area2D"]
+y_sort_enabled = true
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+y_sort_enabled = true
+texture = ExtResource("1_xtwgx")
+offset = Vector2(0, -80)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(3, -48)
+scale = Vector2(0.969283, -0.247379)
+shape = SubResource("RectangleShape2D_xtwgx")
+
+[node name="StaticBody2D" type="StaticBody2D" parent="."]
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="StaticBody2D"]
+position = Vector2(-135, 10)
+polygon = PackedVector2Array(-2, -66, 271, -64, 269, 6, 169.495, 10.945, 167.595, -45.115, 99.03, -44.185, 99.135, 8, 1, 8)
