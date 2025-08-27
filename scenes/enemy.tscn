@@ -156,10 +156,10 @@ graph_offset = Vector2(-246.877, -34.4198)
 bg_color = Color(0.788235, 0, 0, 0.439216)
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_md0e3"]
-radius = 64.0703
+radius = 73.0
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_4ra3w"]
-radius = 155.0
+radius = 178.025
 
 [node name="Enemy" type="CharacterBody2D" groups=["enemies"]]
 script = ExtResource("1_4gyqm")
@@ -167,7 +167,6 @@ script = ExtResource("1_4gyqm")
 [node name="NavigationAgent2D" type="NavigationAgent2D" parent="."]
 path_postprocessing = 1
 avoidance_enabled = true
-debug_enabled = true
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 y_sort_enabled = true

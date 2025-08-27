@@ -4,7 +4,9 @@ extends CharacterBody2D
 @export var health: int = 50
 @export var max_health: int = 50
 @export var attack_damage: int = 10
-@export var attack_range: float = 50.0
+@export var attack_range: float = 70.0
+@export var tower_attack_range: float = 100.0
+@export var castle_attack_range: float = 50.0
 
 enum State { MOVE, ATTACK, DIE }
 var current_state: State = State.MOVE
@@ -86,10 +88,20 @@ func state_attack(delta: float):
 		sprite.flip_h = true
 	elif direction_to_target.x > 0.1:
 		sprite.flip_h = false
-		
+	
 	var distance_to_target = global_position.distance_to(current_target.global_position)
 	
-	if distance_to_target > attack_range:
+	
+	var effective_range: float
+	if current_target.is_in_group("towers"):
+		effective_range = tower_attack_range
+	elif current_target.is_in_group("castle"): # Example of how easy it is to expand
+		effective_range = castle_attack_range # Assuming you add this variable
+	else:
+		effective_range = attack_range
+		
+	if distance_to_target > effective_range:
+		# BEHAVIOR: PURSUE
 		velocity = direction_to_target * movement_speed
 		state_machine.travel("walk")
 	else:
@@ -121,7 +133,7 @@ func _on_attack_area_body_entered(body):
 	var target = body.owner
 	
 	if current_state == State.MOVE:
-		if body.is_in_group("towers") or body.is_in_group("castle"):
+		if target.is_in_group("towers") or target.is_in_group("castle"):
 			current_target = target
 			change_state(State.ATTACK)
 
@@ -131,7 +143,6 @@ func _on_attack_area_body_exited(body):
 		change_state(State.MOVE)
 
 func perform_attack():
-	# Play an animation
 	state_machine.travel("attack_1")
 	
 	if is_instance_valid(current_target) and current_target.has_method("take_damage"):
