@@ -1,12 +1,15 @@
-[gd_scene load_steps=3 format=3 uid="uid://ln6g1x5kag1k"]
+[gd_scene load_steps=4 format=3 uid="uid://ln6g1x5kag1k"]
 
+[ext_resource type="Script" uid="uid://baqv2sboykjk0" path="res://src/castle.gd" id="1_0ysgy"]
 [ext_resource type="Texture2D" uid="uid://b01xsegrurcuw" path="res://assets/Buildings/Blue Buildings/Castle.png" id="1_xtwgx"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_xtwgx"]
 size = Vector2(263, 44.6695)
 
-[node name="Area2D" type="Area2D"]
+[node name="Area2D" type="Area2D" groups=["castle"]]
 y_sort_enabled = true
+collision_layer = 17
+script = ExtResource("1_0ysgy")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 y_sort_enabled = true
@@ -18,8 +21,9 @@ position = Vector2(3, -48)
 scale = Vector2(0.969283, -0.247379)
 shape = SubResource("RectangleShape2D_xtwgx")
 
-[node name="StaticBody2D" type="StaticBody2D" parent="."]
+[node name="StaticBody2D" type="StaticBody2D" parent="." groups=["castle"]]
+collision_layer = 17
 
-[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="StaticBody2D"]
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="StaticBody2D" groups=["castle"]]
 position = Vector2(-135, 10)
 polygon = PackedVector2Array(-2, -66, 271, -64, 269, 6, 169.495, 10.945, 167.595, -45.115, 99.03, -44.185, 99.135, 8, 1, 8)

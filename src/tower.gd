@@ -13,6 +13,8 @@ var enemies_in_range: Array = []
 @onready var bow: Sprite2D = $Bow
 
 func _ready():
+	add_to_group("towers")
+	
 	fire_rate_timer.wait_time = fire_rate
 	fire_rate_timer.start()
 
@@ -57,3 +59,6 @@ func _on_body_exited(body: Node2D):
 		enemies_in_range.erase(body)
 		if body == target:
 			find_new_target()
+			
+func take_damage(amount: int):
+	print("Tower got attacked ", amount)

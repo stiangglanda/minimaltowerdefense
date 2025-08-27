@@ -4,8 +4,8 @@
 [ext_resource type="Texture2D" uid="uid://cb8lywq1xkfws" path="res://assets/player.png" id="2_kne1u"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_wd1uf"]
-radius = 14.0
-height = 28.0
+radius = 19.0
+height = 40.0
 
 [sub_resource type="Animation" id="Animation_wd1uf"]
 length = 0.001
@@ -156,8 +156,9 @@ graph_offset = Vector2(-246.877, -34.4198)
 [sub_resource type="CircleShape2D" id="CircleShape2D_kpjcp"]
 radius = 72.0278
 
-[node name="CharacterBody2D" type="CharacterBody2D"]
+[node name="CharacterBody2D" type="CharacterBody2D" groups=["player"]]
 y_sort_enabled = true
+collision_layer = 3
 script = ExtResource("1_kpjcp")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
@@ -166,9 +167,9 @@ texture = ExtResource("2_kne1u")
 hframes = 8
 vframes = 4
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." groups=["player"]]
 y_sort_enabled = true
-position = Vector2(2, 29)
+position = Vector2(1, 25)
 shape = SubResource("CapsuleShape2D_wd1uf")
 
 [node name="Camera2D" type="Camera2D" parent="."]

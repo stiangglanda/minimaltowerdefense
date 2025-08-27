@@ -6,13 +6,14 @@
 [ext_resource type="Texture2D" uid="uid://bv352o623sx7o" path="res://assets/Units/Red Units/Archer/Archer_Shoot.png" id="4_jbe1c"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_k1sas"]
-size = Vector2(68.5, 53.5)
+size = Vector2(99, 68)
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_vedim"]
 radius = 42.0119
 
-[node name="Tower" type="Area2D"]
+[node name="Tower" type="Area2D" groups=["towers"]]
 y_sort_enabled = true
+collision_layer = 9
 script = ExtResource("1_vedim")
 projectile_scene = ExtResource("2_stebd")
 
@@ -20,10 +21,11 @@ projectile_scene = ExtResource("2_stebd")
 position = Vector2(-3, -55)
 texture = ExtResource("1_k1sas")
 
-[node name="Footprint" type="StaticBody2D" parent="."]
+[node name="Footprint" type="StaticBody2D" parent="." groups=["towers"]]
+collision_layer = 9
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Footprint"]
-position = Vector2(-1, 12)
+position = Vector2(-1.5, 13)
 shape = SubResource("RectangleShape2D_k1sas")
 
 [node name="Range" type="CollisionShape2D" parent="."]

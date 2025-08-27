@@ -3,19 +3,30 @@ extends CharacterBody2D
 @export var movement_speed: float = 100.0
 @export var health: int = 50
 @export var max_health: int = 50
+@export var attack_damage: int = 10
+@export var attack_range: float = 50.0
+
+enum State { MOVE, ATTACK, DIE }
+var current_state: State = State.MOVE
+
+var current_target = null
 
 @onready var navigation_agent: NavigationAgent2D = $NavigationAgent2D
 @onready var animation_tree: AnimationTree = $AnimationTree
 @onready var state_machine = animation_tree.get("parameters/playback")
 @onready var sprite: Sprite2D = $Sprite2D
 @onready var health_bar: ProgressBar = $HealthBar
+@onready var player_detection_area: Area2D = $PlayerDetectionArea
+@onready var attack_area: Area2D = $AttackArea
+@onready var attack_cooldown: Timer = $AttackCooldown
 
 var is_taking_damage = false
-var is_dying = false
 var original_modulate: Color
 var damage_numbers_scene = preload("res://scenes/DamageNumber.tscn")
 
 func _ready():
+	add_to_group("enemies")
+	
 	max_health = health
 	original_modulate = sprite.modulate
 	
@@ -28,14 +39,25 @@ func set_target_position(target_pos: Vector2):
 	navigation_agent.target_position = target_pos
 
 func _physics_process(delta: float):
-	if is_dying:
-		velocity = Vector2.ZERO
-		return
-		
+	match current_state:
+		State.MOVE:
+			state_move(delta)
+		State.ATTACK:
+			state_attack(delta)
+		State.DIE:
+			pass
+			
+	move_and_slide()
+
+func state_move(delta: float):
 	if navigation_agent.is_navigation_finished():
 		velocity = Vector2.ZERO
-		pick_new_state()
-		die_peacefully()
+		var castle = get_tree().get_first_node_in_group("castle")
+		if castle:
+			current_target = castle
+			change_state(State.ATTACK)
+		else:
+			die_peacefully()
 		return
 	
 	var next_path_position: Vector2 = navigation_agent.get_next_path_position()
@@ -47,62 +69,118 @@ func _physics_process(delta: float):
 		sprite.flip_h = true
 	elif velocity.x > 1.0:
 		sprite.flip_h = false
-		
-	pick_new_state()
-	move_and_slide()
-
-func pick_new_state():
-	if is_taking_damage or is_dying:
-		return
-		
-	var current_state = state_machine.get_current_node()
-	if current_state == "attack_1" or current_state == "attack_2":
-		return
 	
-	if velocity.length() > 1.0:
+	state_machine.travel("walk")
+
+func state_attack(delta: float):
+	if not is_instance_valid(current_target):
+		current_target = null
+		change_state(State.MOVE)
+		var castle = get_tree().get_first_node_in_group("castle")
+		if castle:
+			set_target_position(castle.global_position)
+		return
+
+	var direction_to_target = global_position.direction_to(current_target.global_position)
+	if direction_to_target.x < -0.1:
+		sprite.flip_h = true
+	elif direction_to_target.x > 0.1:
+		sprite.flip_h = false
+		
+	var distance_to_target = global_position.distance_to(current_target.global_position)
+	
+	if distance_to_target > attack_range:
+		velocity = direction_to_target * movement_speed
 		state_machine.travel("walk")
 	else:
-		state_machine.travel("idle")
+		velocity = Vector2.ZERO
+		
+		if attack_cooldown.is_stopped():
+			perform_attack()
+		else:
+			state_machine.travel("idle")
+
+
+func change_state(new_state: State):
+	current_state = new_state
+
+func _on_player_detection_area_body_entered(body):
+	if body.is_in_group("player"):
+		current_target = body
+		change_state(State.ATTACK)
+
+func _on_player_detection_area_body_exited(body):
+	if body == current_target:
+		current_target = null
+		change_state(State.MOVE)
+		var castle = get_tree().get_first_node_in_group("castle")
+		if castle:
+			set_target_position(castle.global_position)
+
+func _on_attack_area_body_entered(body):
+	var target = body.owner
+	
+	if current_state == State.MOVE:
+		if body.is_in_group("towers") or body.is_in_group("castle"):
+			current_target = target
+			change_state(State.ATTACK)
+
+func _on_attack_area_body_exited(body):
+	if body == current_target:
+		current_target = null
+		change_state(State.MOVE)
+
+func perform_attack():
+	# Play an animation
+	state_machine.travel("attack_1")
+	
+	if is_instance_valid(current_target) and current_target.has_method("take_damage"):
+		current_target.take_damage(attack_damage)
+	
+	attack_cooldown.start()
+
 
 func take_damage(amount: int):
-	if is_dying:
+	if current_state == State.DIE:
 		return
 		
 	health -= amount
 	
 	show_damage_number(amount)
-	
 	update_health_bar()
-	
 	show_hit_effect()
 	
 	if health <= 0:
 		die_from_combat()
-	else:
-		hit_reaction()
+
+
+func die_from_combat():
+	if current_state == State.DIE:
+		return
+		
+	change_state(State.DIE)
+	velocity = Vector2.ZERO
+	
+	$CollisionShape2D.set_deferred("disabled", true)
+	
+	create_death_effects()
+	
+	await get_tree().create_timer(0.8).timeout
+	queue_free()
+
+func die_peacefully():
+	queue_free()
 
 func show_hit_effect():
-	"""Flash the enemy red, then white, then back to normal"""
 	is_taking_damage = true
-	
 	sprite.modulate = Color.RED
 	await get_tree().create_timer(0.08).timeout
-	
 	sprite.modulate = Color.WHITE
 	await get_tree().create_timer(0.08).timeout
-	
 	sprite.modulate = original_modulate
 	is_taking_damage = false
 
-func hit_reaction():
-	"""Brief knockback and pause when hit"""
-	var knockback_force = Vector2.RIGHT * 50 if sprite.flip_h else Vector2.LEFT * 50
-	velocity = knockback_force
-	
-	await get_tree().create_timer(0.2).timeout
-
 func show_damage_number(damage_amount: int):
-	"""Show floating damage number (optional - requires DamageNumber scene)"""
 	if damage_numbers_scene:
 		var damage_instance = damage_numbers_scene.instantiate()
 		get_parent().add_child(damage_instance)
@@ -110,11 +188,9 @@ func show_damage_number(damage_amount: int):
 		damage_instance.setup(damage_amount)
 
 func update_health_bar():
-	"""Update and show health bar"""
 	if health_bar:
 		health_bar.value = health
 		health_bar.visible = true
-		
 		var health_percent = float(health) / float(max_health)
 		if health_percent > 0.6:
 			health_bar.modulate = Color.GREEN
@@ -123,43 +199,9 @@ func update_health_bar():
 		else:
 			health_bar.modulate = Color.RED
 
-func die_from_combat():
-	"""Death from taking damage"""
-	if is_dying:
-		return
-		
-	is_dying = true
-	velocity = Vector2.ZERO
-	
-	create_death_effects()
-	
-	await get_tree().create_timer(0.8).timeout
-	queue_free()
-
-func die_peacefully():
-	"""Death from reaching destination (no dramatic effects)"""
-	queue_free()
-
 func create_death_effects():
-	"""Create death effects without animations"""
 	var tween = create_tween()
 	tween.parallel().tween_property(sprite, "modulate:a", 0.0, 0.5)
 	tween.parallel().tween_property(sprite, "scale", Vector2(1.2, 1.2), 0.3)
 	tween.parallel().tween_property(sprite, "scale", Vector2(0.8, 0.8), 0.5).set_delay(0.3)
-	
 	tween.parallel().tween_property(sprite, "rotation", randf_range(-PI/4, PI/4), 0.4)
-	
-	create_screen_shake()
-
-func create_screen_shake():
-	"""Simple screen shake effect"""
-	if get_viewport().get_camera_2d():
-		var camera = get_viewport().get_camera_2d()
-		var original_pos = camera.global_position
-		
-		for i in range(10):
-			var shake_offset = Vector2(randf_range(-5, 5), randf_range(-5, 5))
-			camera.global_position = original_pos + shake_offset
-			await get_tree().create_timer(0.05).timeout
-		
-		camera.global_position = original_pos

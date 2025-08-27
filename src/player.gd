@@ -84,3 +84,6 @@ func _on_enemy_exited_range(body):
 func _on_animation_finished(anim_name):
 	if anim_name == "attack_1" or anim_name == "attack_2":
 		can_attack = true
+
+func take_damage(amount: int):
+	print("Player got attacked ", amount)

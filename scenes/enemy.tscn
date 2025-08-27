@@ -1,10 +1,10 @@
-[gd_scene load_steps=27 format=3 uid="uid://2wfgur7nai5h"]
+[gd_scene load_steps=29 format=3 uid="uid://2wfgur7nai5h"]
 
 [ext_resource type="Script" uid="uid://gsl47nabgqu" path="res://src/enemy.gd" id="1_4gyqm"]
 [ext_resource type="Texture2D" uid="uid://b82yxve534ul4" path="res://assets/enemy.png" id="2_4gyqm"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_4gyqm"]
-radius = 11.0454
+radius = 15.0333
 
 [sub_resource type="Animation" id="Animation_wd1uf"]
 length = 0.001
@@ -31,10 +31,10 @@ tracks/0/path = NodePath("Sprite2D:frame")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PackedFloat32Array(-4.47035e-08, 0.1, 0.2, 0.3, 0.6),
-"transitions": PackedFloat32Array(1, 1, 1, 1, 1),
+"times": PackedFloat32Array(-4.47035e-08, 0.1, 0.2, 0.3),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
 "update": 1,
-"values": [24, 25, 26, 27, 31]
+"values": [24, 25, 26, 27]
 }
 
 [sub_resource type="Animation" id="Animation_8gxew"]
@@ -155,11 +155,19 @@ graph_offset = Vector2(-246.877, -34.4198)
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_4gyqm"]
 bg_color = Color(0.788235, 0, 0, 0.439216)
 
+[sub_resource type="CircleShape2D" id="CircleShape2D_md0e3"]
+radius = 64.0703
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_4ra3w"]
+radius = 155.0
+
 [node name="Enemy" type="CharacterBody2D" groups=["enemies"]]
 script = ExtResource("1_4gyqm")
 
 [node name="NavigationAgent2D" type="NavigationAgent2D" parent="."]
+path_postprocessing = 1
 avoidance_enabled = true
+debug_enabled = true
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 y_sort_enabled = true
@@ -190,3 +198,25 @@ theme_override_styles/fill = SubResource("StyleBoxFlat_4gyqm")
 max_value = 50.0
 value = 50.0
 show_percentage = false
+
+[node name="AttackArea" type="Area2D" parent="."]
+collision_layer = 0
+collision_mask = 26
+
+[node name="AttackCollisionShape" type="CollisionShape2D" parent="AttackArea"]
+shape = SubResource("CircleShape2D_md0e3")
+
+[node name="AttackCooldown" type="Timer" parent="."]
+one_shot = true
+
+[node name="PlayerDetectionArea" type="Area2D" parent="."]
+collision_layer = 0
+collision_mask = 2
+
+[node name="DetectionCollisionShape" type="CollisionShape2D" parent="PlayerDetectionArea"]
+shape = SubResource("CircleShape2D_4ra3w")
+
+[connection signal="body_entered" from="AttackArea" to="." method="_on_attack_area_body_entered"]
+[connection signal="body_exited" from="AttackArea" to="." method="_on_attack_area_body_exited"]
+[connection signal="body_entered" from="PlayerDetectionArea" to="." method="_on_player_detection_area_body_entered"]
+[connection signal="body_exited" from="PlayerDetectionArea" to="." method="_on_player_detection_area_body_exited"]
