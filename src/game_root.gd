@@ -47,7 +47,7 @@ func _on_build_menu_build_tower_selected(tower_data: Dictionary):
 	else:
 		print("UI let you click, but you can't afford it!")
 
-func _unhandled_input(event):
+func _input(event):
 	if is_placing and Input.is_action_just_pressed("accept"):
 		place_tower()
 		get_tree().get_root().set_input_as_handled()

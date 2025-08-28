@@ -194,6 +194,7 @@ func add_gold(amount: int):
 func spend_gold(amount: int) -> bool:
 	if gold >= amount:
 		gold -= amount
+		GoldLabel.text = str(gold)
 		gold_updated.emit(gold)
 		print("Player spent %d gold! Total gold: %d" % [amount, gold])
 		return true
