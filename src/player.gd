@@ -28,7 +28,7 @@ var can_attack = true
 var enemies_in_range = []
 var isDead = false
 var original_modulate: Color
-var Gold = 10
+var gold = 10
 
 func _ready():
 	attack_area.body_entered.connect(_on_enemy_entered_range)
@@ -180,3 +180,8 @@ func _on_regen_tick_timer_timeout():
 	if health >= max_health:
 		regen_tick_timer.stop()
 		print("Health is full. Stopping regeneration.")
+
+func add_gold(amount: int):
+	gold += amount
+	GoldLabel.text = str(gold)
+	print("Player received %d gold! Total gold: %d" % [amount, gold])

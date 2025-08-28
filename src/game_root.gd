@@ -14,6 +14,7 @@ var ghost_tower = null
 @onready var castle = $NavigationRegion2D/castle
 @onready var spawn_timer = $NavigationRegion2D/Timer
 @onready var enemy_spawn_node = $"NavigationRegion2D/y-sort/enemys"
+@onready var player = $"NavigationRegion2D/y-sort/Player"
 
 func _ready():
 	spawn_timer.timeout.connect(_on_spawn_timer_timeout)
@@ -24,12 +25,12 @@ func _on_spawn_timer_timeout():
 		return
 		
 	var new_enemy = enemy_scene.instantiate()
-	
 	enemy_spawn_node.add_child(new_enemy)
-	
 	new_enemy.global_position = spawn_point.global_position
-	
 	new_enemy.set_target_position(castle.global_position)
+	
+	if player:
+		new_enemy.died.connect(player.add_gold)
 
 func _unhandled_input(event):
 	if Input.is_action_just_pressed("build_tower"):

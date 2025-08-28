@@ -1,5 +1,8 @@
 extends CharacterBody2D
 
+signal died(gold_value)
+
+@export var gold_value: int = 1
 @export var movement_speed: float = 100.0
 @export var health: int = 50
 @export var max_health: int = 50
@@ -173,6 +176,8 @@ func die_from_combat():
 	velocity = Vector2.ZERO
 	
 	$CollisionShape2D.set_deferred("disabled", true)
+	
+	died.emit(gold_value)
 	
 	create_death_effects()
 	
