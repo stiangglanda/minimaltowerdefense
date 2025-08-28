@@ -5,6 +5,7 @@ extends CharacterBody2D
 @onready var attack_area = $AttackArea
 @onready var attack_collision = $AttackArea/AttackCollisionShape
 @onready var health_bar = $CanvasLayer/Control/HealthProgressBar
+@onready var end_game_label = $CanvasLayer/Control/EndGame
 @onready var sprite = $Sprite2D
 @onready var GoldLabel = $CanvasLayer/Control/GoldLabel
 @onready var regen_delay_timer: Timer = $RegenDelayTimer
@@ -133,10 +134,10 @@ func die_from_combat():
 	velocity = Vector2.ZERO
 	
 	$CollisionShape2D.set_deferred("disabled", true)
-	
 	create_death_effects()
+	end_game()
 	
-	await get_tree().create_timer(0.8).timeout
+	await get_tree().create_timer(3).timeout
 	queue_free()
 
 func show_hit_effect():
@@ -185,3 +186,6 @@ func add_gold(amount: int):
 	gold += amount
 	GoldLabel.text = str(gold)
 	print("Player received %d gold! Total gold: %d" % [amount, gold])
+
+func end_game():
+	end_game_label.visible = true
