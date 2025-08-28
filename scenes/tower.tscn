@@ -1,15 +1,92 @@
-[gd_scene load_steps=7 format=3 uid="uid://bu11jjiig5jjl"]
+[gd_scene load_steps=17 format=3 uid="uid://bu11jjiig5jjl"]
 
 [ext_resource type="Texture2D" uid="uid://7jgv6hkxvj05" path="res://assets/Buildings/Blue Buildings/Tower.png" id="1_k1sas"]
 [ext_resource type="Script" uid="uid://i7m168xteih0" path="res://src/tower.gd" id="1_vedim"]
 [ext_resource type="PackedScene" uid="uid://5q86frottauf" path="res://scenes/projectile.tscn" id="2_stebd"]
-[ext_resource type="Texture2D" uid="uid://bv352o623sx7o" path="res://assets/Units/Red Units/Archer/Archer_Shoot.png" id="4_jbe1c"]
+[ext_resource type="Texture2D" uid="uid://u6wysdc86rrv" path="res://assets/archer.png" id="4_qrbg1"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_qrbg1"]
 radius = 54.6466
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_vedim"]
 radius = 42.0119
+
+[sub_resource type="Animation" id="Animation_jfguu"]
+resource_name = "idle"
+length = 0.6
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Bow:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3, 0.4, 0.5),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [8, 9, 10, 11, 12, 13]
+}
+
+[sub_resource type="Animation" id="Animation_85u2j"]
+resource_name = "attack"
+length = 0.8
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Bow:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [1, 2, 3, 4, 5, 6, 7, 8]
+}
+
+[sub_resource type="Animation" id="Animation_xl0gn"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Bow:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [0]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_vqps3"]
+_data = {
+&"RESET": SubResource("Animation_xl0gn"),
+&"attack": SubResource("Animation_85u2j"),
+&"idle": SubResource("Animation_jfguu")
+}
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_qfw7u"]
+animation = &"attack"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_p8022"]
+animation = &"idle"
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_olwqo"]
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_5w3wq"]
+switch_mode = 2
+advance_mode = 2
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_k4j06"]
+advance_mode = 2
+
+[sub_resource type="AnimationNodeStateMachine" id="AnimationNodeStateMachine_i2ndj"]
+states/attack/node = SubResource("AnimationNodeAnimation_qfw7u")
+states/attack/position = Vector2(555, 106)
+states/idle/node = SubResource("AnimationNodeAnimation_p8022")
+states/idle/position = Vector2(364, 116)
+transitions = ["idle", "attack", SubResource("AnimationNodeStateMachineTransition_olwqo"), "attack", "idle", SubResource("AnimationNodeStateMachineTransition_5w3wq"), "Start", "idle", SubResource("AnimationNodeStateMachineTransition_k4j06")]
 
 [node name="Tower" type="Area2D" groups=["towers"]]
 y_sort_enabled = true
@@ -40,8 +117,18 @@ position = Vector2(-1, -83)
 [node name="Bow" type="Sprite2D" parent="."]
 z_index = 1
 position = Vector2(-2, -110)
-texture = ExtResource("4_jbe1c")
+texture = ExtResource("4_qrbg1")
 hframes = 8
+vframes = 2
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+&"": SubResource("AnimationLibrary_vqps3")
+}
+
+[node name="AnimationTree" type="AnimationTree" parent="."]
+tree_root = SubResource("AnimationNodeStateMachine_i2ndj")
+anim_player = NodePath("../AnimationPlayer")
 
 [connection signal="body_entered" from="." to="." method="_on_body_entered"]
 [connection signal="body_exited" from="." to="." method="_on_body_exited"]
