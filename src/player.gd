@@ -7,6 +7,13 @@ extends CharacterBody2D
 @onready var health_bar = $CanvasLayer/Control/HealthProgressBar
 @onready var sprite = $Sprite2D
 @onready var GoldLabel = $CanvasLayer/Control/GoldLabel
+@onready var regen_delay_timer: Timer = $RegenDelayTimer
+@onready var regen_tick_timer: Timer = $RegenTickTimer
+
+@export_group("Regeneration")
+@export var regen_delay: float = 5.0
+@export var regen_amount: int = 5
+@export var regen_tick_rate: float = 1.0
 
 @export var health: int = 300
 @export var max_health: int = 300
@@ -29,7 +36,13 @@ func _ready():
 	
 	animation_tree.animation_finished.connect(_on_animation_finished)
 	original_modulate = sprite.modulate
-	health_bar.modulate = Color.GREEN
+	
+	regen_delay_timer.wait_time = regen_delay
+	regen_tick_timer.wait_time = regen_tick_rate
+	regen_delay_timer.timeout.connect(_on_regen_delay_timer_timeout)
+	regen_tick_timer.timeout.connect(_on_regen_tick_timer_timeout)
+	
+	update_health_bar()
 
 func get_input():
 	input.x = Input.get_action_strength("right") - Input.get_action_strength("left")
@@ -105,6 +118,9 @@ func take_damage(amount: int):
 	update_health_bar()
 	show_hit_effect()
 	
+	regen_tick_timer.stop()
+	regen_delay_timer.start()
+	
 	if health <= 0:
 		die_from_combat()
 
@@ -147,3 +163,20 @@ func create_death_effects():
 	tween.parallel().tween_property(sprite, "scale", Vector2(1.2, 1.2), 0.3)
 	tween.parallel().tween_property(sprite, "scale", Vector2(0.8, 0.8), 0.5).set_delay(0.3)
 	tween.parallel().tween_property(sprite, "rotation", randf_range(-PI/4, PI/4), 0.4)
+	
+func _on_regen_delay_timer_timeout():
+	print("Player is now out of combat. Starting regeneration.")
+	if health < max_health:
+		regen_tick_timer.start()
+
+func _on_regen_tick_timer_timeout():
+	health += regen_amount
+	
+	health = min(health, max_health)
+	
+	print("Player regenerated %d HP. Current health: %d" % [regen_amount, health])
+	update_health_bar()
+	
+	if health >= max_health:
+		regen_tick_timer.stop()
+		print("Health is full. Stopping regeneration.")

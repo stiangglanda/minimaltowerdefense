@@ -230,3 +230,9 @@ show_percentage = false
 [node name="Sprite2D" type="Sprite2D" parent="CanvasLayer/Control"]
 position = Vector2(966, 597)
 texture = ExtResource("3_3li8b")
+
+[node name="RegenDelayTimer" type="Timer" parent="."]
+wait_time = 5.0
+one_shot = true
+
+[node name="RegenTickTimer" type="Timer" parent="."]
