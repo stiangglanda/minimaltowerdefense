@@ -1,9 +1,8 @@
-[gd_scene load_steps=29 format=3 uid="uid://cvota5ylgv847"]
+[gd_scene load_steps=28 format=3 uid="uid://cvota5ylgv847"]
 
 [ext_resource type="Script" uid="uid://dqb277p0kku1s" path="res://src/player.gd" id="1_kpjcp"]
 [ext_resource type="Texture2D" uid="uid://cb8lywq1xkfws" path="res://assets/player.png" id="2_kne1u"]
 [ext_resource type="Texture2D" uid="uid://dfsnm10ocskhq" path="res://assets/coin.png" id="3_3li8b"]
-[ext_resource type="Texture2D" uid="uid://7jgv6hkxvj05" path="res://assets/Buildings/Blue Buildings/Tower.png" id="4_mdl7e"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_wd1uf"]
 radius = 19.0
@@ -261,71 +260,6 @@ theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
 theme_override_font_sizes/font_size = 40
 text = "10"
 metadata/_edit_use_anchors_ = true
-
-[node name="BuildMenu" type="HBoxContainer" parent="CanvasLayer/Control"]
-layout_mode = 1
-anchors_preset = 12
-anchor_top = 1.0
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 0
-alignment = 1
-
-[node name="AspectRatioContainer" type="AspectRatioContainer" parent="CanvasLayer/Control/BuildMenu"]
-layout_mode = 2
-stretch_mode = 0
-alignment_vertical = 2
-
-[node name="Button" type="Button" parent="CanvasLayer/Control/BuildMenu/AspectRatioContainer"]
-layout_mode = 2
-text = "Archer Tower"
-icon = ExtResource("4_mdl7e")
-icon_alignment = 1
-vertical_icon_alignment = 0
-expand_icon = true
-
-[node name="AspectRatioContainer2" type="AspectRatioContainer" parent="CanvasLayer/Control/BuildMenu"]
-layout_mode = 2
-stretch_mode = 0
-alignment_vertical = 2
-
-[node name="Button" type="Button" parent="CanvasLayer/Control/BuildMenu/AspectRatioContainer2"]
-layout_mode = 2
-disabled = true
-text = "Archer Tower"
-icon = ExtResource("4_mdl7e")
-icon_alignment = 1
-vertical_icon_alignment = 0
-expand_icon = true
-
-[node name="AspectRatioContainer3" type="AspectRatioContainer" parent="CanvasLayer/Control/BuildMenu"]
-layout_mode = 2
-stretch_mode = 0
-alignment_vertical = 2
-
-[node name="Button" type="Button" parent="CanvasLayer/Control/BuildMenu/AspectRatioContainer3"]
-layout_mode = 2
-disabled = true
-text = "Archer Tower"
-icon = ExtResource("4_mdl7e")
-icon_alignment = 1
-vertical_icon_alignment = 0
-expand_icon = true
-
-[node name="AspectRatioContainer4" type="AspectRatioContainer" parent="CanvasLayer/Control/BuildMenu"]
-layout_mode = 2
-stretch_mode = 0
-alignment_vertical = 2
-
-[node name="Button" type="Button" parent="CanvasLayer/Control/BuildMenu/AspectRatioContainer4"]
-layout_mode = 2
-disabled = true
-text = "Archer Tower"
-icon = ExtResource("4_mdl7e")
-icon_alignment = 1
-vertical_icon_alignment = 0
-expand_icon = true
 
 [node name="RegenDelayTimer" type="Timer" parent="."]
 wait_time = 5.0

@@ -2,6 +2,7 @@ extends Node2D
 
 @export var tower_scene: PackedScene
 
+var tower_data_to_build: Dictionary
 var is_placing = false
 var ghost_tower = null
 
@@ -15,6 +16,7 @@ var ghost_tower = null
 @onready var spawn_timer = $NavigationRegion2D/Timer
 @onready var enemy_spawn_node = $"NavigationRegion2D/y-sort/enemys"
 @onready var player = $"NavigationRegion2D/y-sort/Player"
+@onready var build_menu = $BuildMenu
 
 func _ready():
 	spawn_timer.timeout.connect(_on_spawn_timer_timeout)
@@ -29,17 +31,23 @@ func _on_spawn_timer_timeout():
 	new_enemy.global_position = spawn_point.global_position
 	new_enemy.set_target_position(castle.global_position)
 	
-	if player:
-		new_enemy.died.connect(player.add_gold)
+	new_enemy.died.connect(player.add_gold)
+	
+	player.gold_updated.connect(build_menu.on_player_gold_updated)
+	build_menu.build_tower_selected.connect(_on_build_menu_build_tower_selected)
+	build_menu.on_player_gold_updated(player.gold)
+
+func _on_build_menu_build_tower_selected(tower_data: Dictionary):
+	if is_placing:
+		cancel_placement()
+	
+	if player.gold >= tower_data.cost:
+		tower_data_to_build = tower_data
+		start_placement()
+	else:
+		print("UI let you click, but you can't afford it!")
 
 func _unhandled_input(event):
-	if Input.is_action_just_pressed("build_tower"):
-		if is_placing:
-			cancel_placement()
-		else:
-			start_placement()
-		get_tree().get_root().set_input_as_handled()
-
 	if is_placing and Input.is_action_just_pressed("accept"):
 		place_tower()
 		get_tree().get_root().set_input_as_handled()
@@ -104,7 +112,7 @@ func place_tower():
 	query.exclude = [footprint.get_rid()]
 	var intersecting_bodies = space_state.intersect_shape(query)
 
-	if intersecting_bodies.is_empty():
+	if intersecting_bodies.is_empty() and player.spend_gold(tower_data_to_build.cost):
 		var new_tower = tower_scene.instantiate()
 		new_tower.global_position = ghost_tower.global_position
 		towers_node.add_child(new_tower)

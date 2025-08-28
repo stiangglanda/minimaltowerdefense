@@ -1,5 +1,7 @@
 extends CharacterBody2D
 
+signal gold_updated(new_gold_amount)
+
 @onready var animation_tree = $AnimationTree
 @onready var state_machine = animation_tree.get("parameters/playback")
 @onready var attack_area = $AttackArea
@@ -37,6 +39,7 @@ func _ready():
 	
 	animation_tree.animation_finished.connect(_on_animation_finished)
 	original_modulate = sprite.modulate
+	gold_updated.emit(gold)
 	
 	regen_delay_timer.wait_time = regen_delay
 	regen_tick_timer.wait_time = regen_tick_rate
@@ -185,7 +188,18 @@ func _on_regen_tick_timer_timeout():
 func add_gold(amount: int):
 	gold += amount
 	GoldLabel.text = str(gold)
+	gold_updated.emit(gold)
 	print("Player received %d gold! Total gold: %d" % [amount, gold])
+
+func spend_gold(amount: int) -> bool:
+	if gold >= amount:
+		gold -= amount
+		gold_updated.emit(gold)
+		print("Player spent %d gold! Total gold: %d" % [amount, gold])
+		return true
+	else:
+		print("Not enough gold!")
+		return false
 
 func end_game():
 	end_game_label.visible = true

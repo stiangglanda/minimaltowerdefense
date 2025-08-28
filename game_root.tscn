@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=4 uid="uid://k43158rdap1d"]
+[gd_scene load_steps=9 format=4 uid="uid://k43158rdap1d"]
 
 [ext_resource type="Script" uid="uid://6ehu7veprurm" path="res://src/game_root.gd" id="1_0o8ui"]
 [ext_resource type="TileSet" uid="uid://b3ftoy3ur1gdj" path="res://assets/new_tile_set.tres" id="1_xj5yv"]
@@ -6,6 +6,7 @@
 [ext_resource type="PackedScene" uid="uid://cvota5ylgv847" path="res://scenes/Player.tscn" id="4_lkrbl"]
 [ext_resource type="PackedScene" uid="uid://2wfgur7nai5h" path="res://scenes/enemy.tscn" id="5_wd1uf"]
 [ext_resource type="PackedScene" uid="uid://ln6g1x5kag1k" path="res://scenes/castle.tscn" id="6_0o8ui"]
+[ext_resource type="PackedScene" uid="uid://d20ux1u824mev" path="res://scenes/build_menu.tscn" id="7_8gxew"]
 
 [sub_resource type="NavigationPolygon" id="NavigationPolygon_0o8ui"]
 vertices = PackedVector2Array(1033, 139, 1033, 69.6797, 1078, 10, 1078, 379.68, 1161, 715, 1161, 645.68, 1261.81, 618.203, 1267.8, 932.18, 138, 10, 949, 72.3125, 649, 69.6797, 854, 939.813, 1077, 715, 854, 611.992, 1077, 648.313, 521, 389.68, 265, 331, 949, 139, 649, 139, 565, 139, 265, 261.68, 521, 459, 1270, 379.68, 1334, 379.68, 1398, 438, 1398, 507.68, 1462, 506.539, 1462, 507.68, 1526, 506.539, 1526, 507.68, 1142, 378.539, 1142, 379.68, 1206, 378.539, 1206, 379.68, 1270, 378.539, 1334, 378.539, 1581.05, 10, 1581.62, 10, 1581.05, 74, 1581.62, 74, 1581.05, 138, 1418, 310, 1581.62, 138, 1581.05, 202, 1581.62, 202, 1581.05, 266, 1581.62, 266, 1581.05, 330, 1418, 378.188, 1581.62, 330, 1581.05, 394, 1581.62, 394, 1581.23, 438, 1610, 506.188, 1610, 10, 1654, 10, 1654, 610.32, 138, 612.922, 437, 459, 565, 72.3125, 1107.42, 310, 1107.42, -54, 1225.4, 9, 1343.15, 9, 1343.04, -43.3203, 1391.93, -43.9766, 1393.84, 12.4375, 1580.33, -42.2422, 1581.51, -42.2031, 1512.73, 6.53125, 1514.46, -54, 1579.93, -54, 1222.85, -54, 437, 392.313, 181, 264.313, 181, 331)
@@ -66,5 +67,7 @@ position = Vector2(193, 67)
 
 [node name="Timer" type="Timer" parent="NavigationRegion2D"]
 wait_time = 3.0
+
+[node name="BuildMenu" parent="." instance=ExtResource("7_8gxew")]
 
 [connection signal="game_over" from="NavigationRegion2D/y-sort/castle2" to="NavigationRegion2D/y-sort/Player" method="end_game"]
