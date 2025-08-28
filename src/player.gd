@@ -7,7 +7,7 @@ extends CharacterBody2D
 @onready var health_bar = $CanvasLayer/Control/HealthProgressBar
 @onready var end_game_label = $CanvasLayer/Control/EndGame
 @onready var sprite = $Sprite2D
-@onready var GoldLabel = $CanvasLayer/Control/GoldLabel
+@onready var GoldLabel = $CanvasLayer/Control/HBoxContainer/GoldLabel
 @onready var regen_delay_timer: Timer = $RegenDelayTimer
 @onready var regen_tick_timer: Timer = $RegenTickTimer
 
