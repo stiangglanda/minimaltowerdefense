@@ -27,3 +27,11 @@ collision_layer = 17
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="StaticBody2D" groups=["castle"]]
 position = Vector2(-135, 10)
 polygon = PackedVector2Array(-2, -66, 271, -64, 269, 6, 169.495, 10.945, 167.595, -45.115, 99.03, -44.185, 99.135, 8, 1, 8)
+
+[node name="ProgressBar" type="ProgressBar" parent="."]
+visible = false
+offset_left = -96.0
+offset_top = -189.0
+offset_right = 96.0
+offset_bottom = -176.0
+show_percentage = false
