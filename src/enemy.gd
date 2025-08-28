@@ -95,8 +95,8 @@ func state_attack(delta: float):
 	var effective_range: float
 	if current_target.is_in_group("towers"):
 		effective_range = tower_attack_range
-	elif current_target.is_in_group("castle"): # Example of how easy it is to expand
-		effective_range = castle_attack_range # Assuming you add this variable
+	elif current_target.is_in_group("castle"):
+		effective_range = castle_attack_range
 	else:
 		effective_range = attack_range
 		

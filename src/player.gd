@@ -4,6 +4,12 @@ extends CharacterBody2D
 @onready var state_machine = animation_tree.get("parameters/playback")
 @onready var attack_area = $AttackArea
 @onready var attack_collision = $AttackArea/AttackCollisionShape
+@onready var health_bar = $CanvasLayer/Control/HealthProgressBar
+@onready var sprite = $Sprite2D
+@onready var GoldLabel = $CanvasLayer/Control/GoldLabel
+
+@export var health: int = 300
+@export var max_health: int = 300
 
 const SPEED = 300.0
 const ACCEL = 5.0
@@ -13,12 +19,17 @@ var input: Vector2
 var attack_combo = 0
 var can_attack = true
 var enemies_in_range = []
+var isDead = false
+var original_modulate: Color
+var Gold = 10
 
 func _ready():
 	attack_area.body_entered.connect(_on_enemy_entered_range)
 	attack_area.body_exited.connect(_on_enemy_exited_range)
 	
 	animation_tree.animation_finished.connect(_on_animation_finished)
+	original_modulate = sprite.modulate
+	health_bar.modulate = Color.GREEN
 
 func get_input():
 	input.x = Input.get_action_strength("right") - Input.get_action_strength("left")
@@ -29,9 +40,9 @@ func _physics_process(delta):
 	var playerInput = get_input()
 	
 	if(playerInput.x <= -0.5):
-		$Sprite2D.flip_h = true
+		sprite.flip_h = true
 	elif(playerInput.x >= 0.5):
-		$Sprite2D.flip_h = false
+		sprite.flip_h = false
 	
 	if Input.is_action_just_pressed("attack") and can_attack:
 		handle_attack()
@@ -59,7 +70,7 @@ func handle_attack():
 
 func deal_damage():
 	for enemy in enemies_in_range:
-		if enemy and is_instance_valid(enemy):
+		if enemy and is_instance_valid(enemy) and enemy.is_in_group("enemies"):
 			if enemy.has_method("take_damage"):
 				enemy.take_damage(ATTACK_DAMAGE)
 				print("Player dealt ", ATTACK_DAMAGE, " damage to enemy!")
@@ -86,4 +97,53 @@ func _on_animation_finished(anim_name):
 		can_attack = true
 
 func take_damage(amount: int):
-	print("Player got attacked ", amount)
+	if isDead:
+		return
+		
+	health -= amount
+	
+	update_health_bar()
+	show_hit_effect()
+	
+	if health <= 0:
+		die_from_combat()
+
+
+func die_from_combat():
+	if isDead:
+		return
+		
+	isDead = true
+	velocity = Vector2.ZERO
+	
+	$CollisionShape2D.set_deferred("disabled", true)
+	
+	create_death_effects()
+	
+	await get_tree().create_timer(0.8).timeout
+	queue_free()
+
+func show_hit_effect():
+	sprite.modulate = Color.RED
+	await get_tree().create_timer(0.08).timeout
+	sprite.modulate = Color.WHITE
+	await get_tree().create_timer(0.08).timeout
+	sprite.modulate = original_modulate
+
+func update_health_bar():
+	if health_bar:
+		health_bar.value = health
+		var health_percent = float(health) / float(max_health)
+		if health_percent > 0.6:
+			health_bar.modulate = Color.GREEN
+		elif health_percent > 0.3:
+			health_bar.modulate = Color.YELLOW
+		else:
+			health_bar.modulate = Color.RED
+
+func create_death_effects():
+	var tween = create_tween()
+	tween.parallel().tween_property(sprite, "modulate:a", 0.0, 0.5)
+	tween.parallel().tween_property(sprite, "scale", Vector2(1.2, 1.2), 0.3)
+	tween.parallel().tween_property(sprite, "scale", Vector2(0.8, 0.8), 0.5).set_delay(0.3)
+	tween.parallel().tween_property(sprite, "rotation", randf_range(-PI/4, PI/4), 0.4)
