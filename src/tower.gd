@@ -1,29 +1,24 @@
 extends Area2D
 
-# --- EXPORTS ---
 @export var projectile_scene: PackedScene
 @export var fire_rate: float = 1.0
 @export var health: int = 200
-@export var destruction_effect_scene: PackedScene # Optional: An explosion/poof effect scene
+@export var destruction_effect_scene: PackedScene
 
-# --- HEALTH & STATE ---
 var max_health: int
 var is_destroyed: bool = false
 
-# --- TARGETING ---
-var target: Node2D = null
+var target = null
 var enemies_in_range: Array = []
 
-# --- NODE REFERENCES ---
 @onready var fire_rate_timer: Timer = $FireRate
 @onready var muzzle: Marker2D = $Muzzle
 @onready var sprite: Sprite2D = $Sprite2D
 @onready var bow: Sprite2D = $Bow
 @onready var animation_tree = $AnimationTree
 @onready var state_machine = animation_tree.get("parameters/playback")
-@onready var hitbox: StaticBody2D = $Footprint # Reference to the physical hitbox
+@onready var hitbox: StaticBody2D = $Footprint
 
-# --- INTERNAL VARS ---
 var original_sprite_modulate: Color
 var original_bow_modulate: Color
 
@@ -42,10 +37,7 @@ func _process(delta: float):
 	if is_destroyed:
 		return
 
-	if is_instance_valid(target):
-		print("test")
-		#bow.look_at(target.global_position)
-	else:
+	if not is_instance_valid(target):
 		find_new_target()
 
 func find_new_target():
@@ -64,16 +56,22 @@ func find_new_target():
 
 func _on_firerate_timeout():
 	if is_instance_valid(target):
-		shoot()
+		start_attack(target)
 
-func shoot():
+func start_attack(p_target):
+	target = p_target
+	
 	state_machine.travel("attack")
+
+func _fire_projectile():
+	if not is_instance_valid(target):
+		return
+		
 	if not projectile_scene:
 		print("ERROR: Projectile scene not set on tower!")
 		return
 		
 	var projectile = projectile_scene.instantiate()
-	
 	get_tree().root.add_child(projectile)
 	
 	projectile.global_transform = muzzle.global_transform
@@ -121,7 +119,6 @@ func destroy_tower():
 	set_process(false)
 	fire_rate_timer.stop()
 	
-	# We disable both the physical hitbox and the enemy detection area
 	remove_from_group("towers")
 	hitbox.get_node("CollisionShape2D").set_deferred("disabled", true)
 	get_node("Range").set_deferred("disabled", true)
