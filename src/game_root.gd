@@ -1,7 +1,5 @@
 extends Node2D
 
-@export var tower_scene: PackedScene
-
 var tower_data_to_build: Dictionary
 var is_placing = false
 var ghost_tower = null
@@ -43,13 +41,13 @@ func _on_build_menu_build_tower_selected(tower_data: Dictionary):
 	
 	if player.gold >= tower_data.cost:
 		tower_data_to_build = tower_data
-		start_placement()
+		start_placement(tower_data.scene)
 	else:
 		print("UI let you click, but you can't afford it!")
 
 func _input(event):
 	if is_placing and Input.is_action_just_pressed("accept"):
-		place_tower()
+		place_tower(tower_data_to_build.scene)
 		get_tree().get_root().set_input_as_handled()
 
 	if is_placing and Input.is_action_just_pressed("cancel"):
@@ -60,7 +58,7 @@ func _process(delta):
 	if is_placing:
 		update_ghost_tower()
 
-func start_placement():
+func start_placement(tower_scene):
 	if !tower_scene:
 		print("ERROR: Tower scene not set.")
 		return
@@ -103,7 +101,7 @@ func update_ghost_tower():
 	else:
 		ghost_tower.modulate = Color(1, 0.5, 0.5, 0.5)
 
-func place_tower():
+func place_tower(tower_scene):
 	var footprint = ghost_tower.get_node("Footprint")
 	var space_state = get_world_2d().direct_space_state
 	var query = PhysicsShapeQueryParameters2D.new()

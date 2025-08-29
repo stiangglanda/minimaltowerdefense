@@ -1,8 +1,7 @@
-[gd_scene load_steps=9 format=4 uid="uid://k43158rdap1d"]
+[gd_scene load_steps=8 format=4 uid="uid://k43158rdap1d"]
 
 [ext_resource type="Script" uid="uid://6ehu7veprurm" path="res://src/game_root.gd" id="1_0o8ui"]
 [ext_resource type="TileSet" uid="uid://b3ftoy3ur1gdj" path="res://assets/new_tile_set.tres" id="1_xj5yv"]
-[ext_resource type="PackedScene" uid="uid://bu11jjiig5jjl" path="res://scenes/tower.tscn" id="2_wd1uf"]
 [ext_resource type="PackedScene" uid="uid://cvota5ylgv847" path="res://scenes/Player.tscn" id="4_lkrbl"]
 [ext_resource type="PackedScene" uid="uid://2wfgur7nai5h" path="res://scenes/enemy.tscn" id="5_wd1uf"]
 [ext_resource type="PackedScene" uid="uid://ln6g1x5kag1k" path="res://scenes/castle.tscn" id="6_0o8ui"]
@@ -15,7 +14,6 @@ outlines = Array[PackedVector2Array]([PackedVector2Array(70, -49, 1095, -47, 109
 
 [node name="GameRoot" type="Node2D"]
 script = ExtResource("1_0o8ui")
-tower_scene = ExtResource("2_wd1uf")
 enemy_scene = ExtResource("5_wd1uf")
 
 [node name="NavigationRegion2D" type="NavigationRegion2D" parent="."]

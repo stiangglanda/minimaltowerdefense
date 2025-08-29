@@ -7,7 +7,7 @@ const ARCHER_TOWER_DATA = {
 	"cost": 10
 }
 
-@onready var archer_button: Button = $Control/BuildMenu/AspectRatioContainer/Button
+@onready var archer_button: Button = $Control/BuildMenu/Button
 
 func _ready():
 	archer_button.pressed.connect(_on_archer_tower_button_pressed)
