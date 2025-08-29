@@ -1,7 +1,7 @@
 extends CanvasLayer
 
-@onready var end_game_label = $Control/VBoxContainer
-@onready var Highscore = $Control/VBoxContainer/HBoxContainer/Highscore
+@onready var end_game_label = $Control
+@onready var Highscore = $Control/ColorRect/VBoxContainer/HBoxContainer/Highscore
 
 var HighscoreCount = 0
 

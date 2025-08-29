@@ -33,6 +33,7 @@ var isDead = false
 var original_modulate: Color
 var gold = 10
 var killcount = 0
+var health_bar_stylebox_is_unique = false
 
 func _ready():
 	attack_area.body_entered.connect(_on_enemy_entered_range)
@@ -153,6 +154,12 @@ func show_hit_effect():
 
 func update_health_bar():
 	if health_bar:
+		if not health_bar_stylebox_is_unique:
+			var fill_stylebox = health_bar.get_theme_stylebox("fill")
+			var unique_fill_stylebox = fill_stylebox.duplicate()
+			health_bar.add_theme_stylebox_override("fill", unique_fill_stylebox)
+			health_bar_stylebox_is_unique = true
+		
 		health_bar.value = health
 		var health_percent = float(health) / float(max_health)
 		if health_percent > 0.6:
