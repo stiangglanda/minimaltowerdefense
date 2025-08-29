@@ -22,6 +22,10 @@ func _ready():
 	spawn_timer.timeout.connect(_on_spawn_timer_timeout)
 	spawn_timer.start()
 	
+	player.gold_updated.connect(build_menu.on_player_gold_updated)
+	build_menu.build_tower_selected.connect(_on_build_menu_build_tower_selected)
+	build_menu.on_player_gold_updated(player.gold)
+	
 	#if OS.has_feature("mobile"):
 	#	var mobile_controls = MobileControlsScene.instantiate()
 	#	add_child(mobile_controls)
@@ -38,10 +42,6 @@ func _on_spawn_timer_timeout():
 	
 	new_enemy.died.connect(player.add_gold)
 	new_enemy.died.connect(GameOver.IncreseHighscore)
-	
-	player.gold_updated.connect(build_menu.on_player_gold_updated)
-	build_menu.build_tower_selected.connect(_on_build_menu_build_tower_selected)
-	build_menu.on_player_gold_updated(player.gold)
 
 func _on_build_menu_build_tower_selected(tower_data: Dictionary):
 	if is_placing:
