@@ -160,6 +160,7 @@ radius = 72.0278
 [node name="CharacterBody2D" type="CharacterBody2D" groups=["player"]]
 y_sort_enabled = true
 collision_layer = 3
+collision_mask = 5
 script = ExtResource("1_kpjcp")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
@@ -188,6 +189,7 @@ anim_player = NodePath("../AnimationPlayer")
 
 [node name="AttackArea" type="Area2D" parent="."]
 collision_layer = 2
+collision_mask = 5
 
 [node name="AttackCollisionShape" type="CollisionShape2D" parent="AttackArea"]
 shape = SubResource("CircleShape2D_kpjcp")
@@ -240,17 +242,19 @@ text = "Game Over"
 [node name="HBoxContainer" type="HBoxContainer" parent="CanvasLayer/Control"]
 layout_mode = 1
 anchors_preset = -1
-anchor_left = 0.826
+anchor_left = 0.848396
 anchor_right = 1.0
 anchor_bottom = 0.12
-offset_left = -0.552063
-offset_bottom = 0.239998
+offset_left = -0.351929
+offset_bottom = 0.23999
 grow_horizontal = 0
 metadata/_edit_use_anchors_ = true
 
 [node name="TextureRect" type="TextureRect" parent="CanvasLayer/Control/HBoxContainer"]
 layout_mode = 2
 texture = ExtResource("3_3li8b")
+expand_mode = 3
+stretch_mode = 4
 
 [node name="GoldLabel" type="Label" parent="CanvasLayer/Control/HBoxContainer"]
 layout_mode = 2

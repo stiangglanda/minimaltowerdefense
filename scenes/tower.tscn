@@ -106,6 +106,7 @@ transitions = ["idle", "attack", SubResource("AnimationNodeStateMachineTransitio
 [node name="Tower" type="Area2D" groups=["towers"]]
 y_sort_enabled = true
 collision_layer = 9
+collision_mask = 5
 script = ExtResource("1_vedim")
 projectile_scene = ExtResource("2_stebd")
 destruction_effect_scene = ExtResource("3_jfguu")

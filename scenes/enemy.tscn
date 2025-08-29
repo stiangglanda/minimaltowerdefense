@@ -162,6 +162,7 @@ radius = 73.0
 radius = 178.025
 
 [node name="Enemy" type="CharacterBody2D" groups=["enemies"]]
+collision_layer = 4
 script = ExtResource("1_4gyqm")
 
 [node name="NavigationAgent2D" type="NavigationAgent2D" parent="."]
