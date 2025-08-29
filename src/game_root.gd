@@ -8,6 +8,7 @@ var ghost_tower = null
 @onready var towers_node = $"NavigationRegion2D/y-sort/towers"
 
 @export var enemy_scene: PackedScene
+@export var MobileControlsScene: PackedScene
 
 @onready var spawn_point = $NavigationRegion2D/spawn
 @onready var castle = $NavigationRegion2D/castle
@@ -20,6 +21,11 @@ var ghost_tower = null
 func _ready():
 	spawn_timer.timeout.connect(_on_spawn_timer_timeout)
 	spawn_timer.start()
+	
+	if OS.has_feature("mobile"):
+		var mobile_controls = MobileControlsScene.instantiate()
+		add_child(mobile_controls)
+		print("Mobile device detected. Adding touch controls.")
 
 func _on_spawn_timer_timeout():
 	if not enemy_scene:

@@ -1,0 +1,50 @@
+[gd_scene load_steps=4 format=3 uid="uid://ca1rixd6rk67p"]
+
+[ext_resource type="Texture2D" uid="uid://uj2nmyrjde3o" path="res://assets/uiAttack.png" id="1_l7u83"]
+[ext_resource type="Script" uid="uid://dhf28bk2atf7q" path="res://addons/touch_screen_joystick/touch_screen_joystick.gd" id="2_l7u83"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_5yoks"]
+radius = 259.75
+
+[node name="MobileControls" type="CanvasLayer"]
+
+[node name="Control" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 4
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Control"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.09
+anchor_top = 0.622
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 0.319992
+offset_top = -0.0560303
+offset_right = -120.0
+grow_horizontal = 2
+grow_vertical = 0
+
+[node name="attackBtn" type="TouchScreenButton" parent="Control/HBoxContainer"]
+scale = Vector2(0.235, 0.235)
+texture_normal = ExtResource("1_l7u83")
+shape = SubResource("CircleShape2D_5yoks")
+passby_press = true
+action = "attack"
+
+[node name="TouchScreenJoystick" type="Control" parent="Control/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 10
+size_flags_vertical = 4
+script = ExtResource("2_l7u83")
+use_input_actions = true
+action_left = &"left"
+action_right = &"right"
+action_up = &"up"
+action_down = &"down"
+metadata/_custom_type_script = "uid://dhf28bk2atf7q"
