@@ -1,13 +1,13 @@
 extends CharacterBody2D
 
 signal gold_updated(new_gold_amount)
+signal game_over()
 
 @onready var animation_tree = $AnimationTree
 @onready var state_machine = animation_tree.get("parameters/playback")
 @onready var attack_area = $AttackArea
 @onready var attack_collision = $AttackArea/AttackCollisionShape
 @onready var health_bar = $CanvasLayer/Control/HealthProgressBar
-@onready var end_game_label = $CanvasLayer/Control/EndGame
 @onready var sprite = $Sprite2D
 @onready var GoldLabel = $CanvasLayer/Control/HBoxContainer/GoldLabel
 @onready var regen_delay_timer: Timer = $RegenDelayTimer
@@ -32,6 +32,7 @@ var enemies_in_range = []
 var isDead = false
 var original_modulate: Color
 var gold = 10
+var killcount = 0
 
 func _ready():
 	attack_area.body_entered.connect(_on_enemy_entered_range)
@@ -138,7 +139,7 @@ func die_from_combat():
 	
 	$CollisionShape2D.set_deferred("disabled", true)
 	create_death_effects()
-	end_game()
+	game_over.emit()
 	
 	await get_tree().create_timer(3).timeout
 	queue_free()
@@ -186,6 +187,7 @@ func _on_regen_tick_timer_timeout():
 		print("Health is full. Stopping regeneration.")
 
 func add_gold(amount: int):
+	killcount=killcount+1
 	gold += amount
 	GoldLabel.text = str(gold)
 	gold_updated.emit(gold)
@@ -201,6 +203,3 @@ func spend_gold(amount: int) -> bool:
 	else:
 		print("Not enough gold!")
 		return false
-
-func end_game():
-	end_game_label.visible = true

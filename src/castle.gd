@@ -1,6 +1,6 @@
 extends Area2D
 
-signal game_over
+signal game_over()
 
 @export var health: int = 1000
 

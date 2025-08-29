@@ -11,9 +11,11 @@ config_version=5
 [application]
 
 config/name="MinimalTowerDefense"
+config/version="1.0"
 run/main_scene="uid://k43158rdap1d"
 config/features=PackedStringArray("4.4", "Mobile")
-config/icon="res://icon.svg"
+boot_splash/image="res://icon.png"
+config/icon="res://icon.png"
 
 [global_group]
 
