@@ -22,10 +22,10 @@ func _ready():
 	spawn_timer.timeout.connect(_on_spawn_timer_timeout)
 	spawn_timer.start()
 	
-	if OS.has_feature("mobile"):
-		var mobile_controls = MobileControlsScene.instantiate()
-		add_child(mobile_controls)
-		print("Mobile device detected. Adding touch controls.")
+	#if OS.has_feature("mobile"):
+	#	var mobile_controls = MobileControlsScene.instantiate()
+	#	add_child(mobile_controls)
+	#	print("Mobile device detected. Adding touch controls.")
 
 func _on_spawn_timer_timeout():
 	if not enemy_scene:
