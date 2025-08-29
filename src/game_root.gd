@@ -67,6 +67,7 @@ func start_placement():
 	
 	is_placing = true
 	ghost_tower = tower_scene.instantiate()
+	ghost_tower.set_as_ghost()
 	ghost_tower.modulate.a = 0.5 
 	add_child(ghost_tower)
 

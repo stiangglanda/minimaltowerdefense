@@ -134,3 +134,20 @@ func destroy_tower():
 	
 	await tween.finished
 	queue_free()
+	
+func set_as_ghost():
+	if is_in_group("towers"):
+		remove_from_group("towers")
+
+	var physical_shape = get_node_or_null("Footprint/CollisionShape2D")
+	if physical_shape:
+		physical_shape.disabled = true
+	else:
+		push_error("Tower ghost could not find 'Footprint/CollisionShape2D' to disable.")
+
+	self.monitoring = false
+
+	set_process(false)
+	var fire_rate_timer = get_node_or_null("FireRate")
+	if fire_rate_timer:
+		fire_rate_timer.stop()
