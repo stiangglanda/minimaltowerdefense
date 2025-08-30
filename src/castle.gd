@@ -61,7 +61,7 @@ func update_health_bar():
 
 
 func show_hit_effect():
-	create_screen_shake(8, 0.2)
+	#create_screen_shake(8, 0.2)
 
 	var tween = create_tween()
 	tween.tween_property(sprite, "modulate", Color.RED, 0).set_delay(0.01)
@@ -75,7 +75,7 @@ func destroy_castle():
 	
 	var tween = create_tween()
 	
-	tween.tween_callback(func(): create_screen_shake(25, 0.5))
+	#tween.tween_callback(func(): create_screen_shake(25, 0.5))
 	tween.tween_property(sprite, "modulate", Color("#5d1a1a"), 0.5)
 	tween.tween_property(self, "rotation_degrees", 5, 0.2).set_trans(Tween.TRANS_SINE)
 	tween.tween_property(self, "rotation_degrees", -5, 0.2).set_trans(Tween.TRANS_SINE).set_delay(0.2)
