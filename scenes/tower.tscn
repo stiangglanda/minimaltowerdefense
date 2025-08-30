@@ -7,7 +7,7 @@
 [ext_resource type="Texture2D" uid="uid://u6wysdc86rrv" path="res://assets/archer.png" id="4_qrbg1"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_jfguu"]
-size = Vector2(99.5, 78.25)
+size = Vector2(99.5, 67.125)
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_vedim"]
 radius = 64.5609
@@ -112,15 +112,16 @@ projectile_scene = ExtResource("2_stebd")
 destruction_effect_scene = ExtResource("3_jfguu")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
-position = Vector2(-3, -55)
+position = Vector2(0, -9.925)
 texture = ExtResource("1_k1sas")
+offset = Vector2(0, -40.33)
 
 [node name="Footprint" type="StaticBody2D" parent="." groups=["towers"]]
 collision_layer = 9
 collision_mask = 5
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Footprint"]
-position = Vector2(-1.75, 10.875)
+position = Vector2(0, 18)
 shape = SubResource("RectangleShape2D_jfguu")
 
 [node name="Range" type="CollisionShape2D" parent="."]
