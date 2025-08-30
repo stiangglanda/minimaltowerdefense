@@ -25,7 +25,7 @@ Every kill earns you gold to build and expand your defenses. Survive against inc
 This project is open-source and you are welcome to explore the code.
 
 #### Prerequisites
-*   [Godot Engine](https://godotengine.org/download) (v4.x or later)
+*   [Godot Engine](https://godotengine.org/download) (v4.4 or later)
 
 #### Steps
 1.  Clone this repository to your local machine:
