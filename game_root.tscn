@@ -64,11 +64,17 @@ position = Vector2(1369, -19)
 [node name="castle" type="Marker2D" parent="NavigationRegion2D"]
 position = Vector2(1368, -4)
 
-[node name="spawn" type="Marker2D" parent="NavigationRegion2D"]
+[node name="spawn1" type="Marker2D" parent="NavigationRegion2D"]
 position = Vector2(193, 67)
 
-[node name="Timer" type="Timer" parent="NavigationRegion2D"]
-wait_time = 3.0
+[node name="spawn2" type="Marker2D" parent="NavigationRegion2D"]
+position = Vector2(-401, 769)
+
+[node name="WaveTimer" type="Timer" parent="."]
+wait_time = 10.0
+one_shot = true
+
+[node name="SpawnInWaveTimer" type="Timer" parent="."]
 
 [node name="GameOver" parent="." instance=ExtResource("7_ledqy")]
 
