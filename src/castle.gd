@@ -12,6 +12,7 @@ var is_destroyed: bool = false
 @onready var static_body: StaticBody2D = $StaticBody2D
 
 var original_modulate: Color
+var health_bar_stylebox_is_unique = false
 
 
 func _ready():
@@ -42,6 +43,12 @@ func take_damage(amount: int):
 func update_health_bar():
 	var tween = create_tween()
 	tween.tween_property(health_bar, "value", health, 0.2).set_trans(Tween.TRANS_SINE)
+	
+	if not health_bar_stylebox_is_unique:
+		var fill_stylebox = health_bar.get_theme_stylebox("fill")
+		var unique_fill_stylebox = fill_stylebox.duplicate()
+		health_bar.add_theme_stylebox_override("fill", unique_fill_stylebox)
+		health_bar_stylebox_is_unique = true
 	
 	var health_percent = float(health) / float(max_health)
 	if health_percent > 0.6:
