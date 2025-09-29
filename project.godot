@@ -13,7 +13,7 @@ config_version=5
 config/name="MinimalTowerDefense"
 config/version="1.0"
 run/main_scene="uid://k43158rdap1d"
-config/features=PackedStringArray("4.4", "Mobile")
+config/features=PackedStringArray("4.5", "Mobile")
 boot_splash/image="res://icon.png"
 config/icon="res://icon.png"
 
@@ -77,6 +77,10 @@ build_tower={
 2d_physics/layer_3="enemies"
 2d_physics/layer_4="towers"
 2d_physics/layer_5="castle"
+
+[navigation]
+
+2d/merge_rasterizer_cell_scale=0.001
 
 [rendering]
 
