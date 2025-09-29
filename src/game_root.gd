@@ -32,6 +32,10 @@ func _is_mobile() -> bool:
 	if OS.has_feature("mobile"):
 		return true
 	
+	var window = JavaScriptBridge.get_interface("window")
+	if window.isMobileDevice() == true:
+		return true
+	
 	if Engine.has_singleton("JavaScriptBridge"):
 		var js_bridge = Engine.get_singleton("JavaScriptBridge")
 		var result = js_bridge.eval("isMobileDevice()")
