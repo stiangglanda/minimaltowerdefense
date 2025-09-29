@@ -4,6 +4,8 @@ var tower_data_to_build: Dictionary
 var is_placing = false
 var ghost_tower = null
 
+@export var force_mobile_controls_for_testing: bool = false
+
 @onready var tile_map = $"NavigationRegion2D/y-sort/TileMapLayer3"
 @onready var towers_node = $"NavigationRegion2D/y-sort/towers"
 
@@ -26,6 +28,17 @@ var wave_number: int = 0
 var is_in_wave: bool = false
 var current_wave_enemies_to_spawn: Array = []
 
+func _is_mobile() -> bool:
+	if OS.has_feature("mobile"):
+		return true
+	
+	if Engine.has_singleton("JavaScriptBridge"):
+		var js_bridge = Engine.get_singleton("JavaScriptBridge")
+		var result = js_bridge.eval("isMobileDevice()")
+		return result == true
+	
+	return false
+
 func _ready():	
 	wave_timer.timeout.connect(_on_wave_timer_timeout)
 	spawn_in_wave_timer.timeout.connect(_on_spawn_in_wave_timer_timeout)
@@ -37,10 +50,10 @@ func _ready():
 	wave_timer.start(5.0)
 	print("Game started. First wave in 5 seconds.")
 	
-	#if OS.has_feature("mobile"):
-	#	var mobile_controls = MobileControlsScene.instantiate()
-	#	add_child(mobile_controls)
-	#	print("Mobile device detected. Adding touch controls.")
+	if _is_mobile() or force_mobile_controls_for_testing:
+		var mobile_controls = MobileControlsScene.instantiate()
+		add_child(mobile_controls)
+		print("Mobile device detected. Adding touch controls.")
 
 func _on_wave_timer_timeout():
 	wave_number += 1
